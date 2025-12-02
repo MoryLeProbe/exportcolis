@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Colis;
 use App\Entity\Expedition;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,6 +30,22 @@ class ExpeditionType extends AbstractType
                 ],
                 'placeholder' => 'Sélectionner le type de transport',
                 'attr' => ['class' => 'form-control']
+            ])
+            ->add('colis', EntityType::class, [
+                'class' => Colis::class,
+                'multiple' => true,
+                'expanded' => true,
+                'mapped' => false,
+                'choice_label' => function (Colis $colis) {
+                    return $colis->getNumero() . ' - ' . $colis->getType() . ' (' . $colis->getPoids() . ' kg)';
+                },
+                'label' => 'Colis associés',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('prix', NumberType::class, [
+                'label' => 'Coût de l\'expédition',
+                'required' => false,
+                'attr' => ['class' => 'form-control', 'step' => '0.01']
             ])
             ->add('dateDepart', DateTimeType::class, [
                 'label' => 'Date de départ',

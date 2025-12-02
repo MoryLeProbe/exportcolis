@@ -10,7 +10,7 @@
             <tr>
                 <th>#</th>
                 <th>Montant</th>
-                <th>Colis</th>
+                <th>Expédition</th>
                 <th>Mode</th>
                 <th>Statut</th>
                 <th>Date de Paiement</th>
@@ -22,10 +22,10 @@
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ paiement.montant }}</td>
-                <td>{{ paiement.colis.numero }}</td>
+                <td>{{ paiement.expedition.numero }}</td>
                 <td>{{ paiement.mode }}</td>
                 <td>{{ paiement.statut }}</td>
-                <td>{{ paiement.datePaiement ? paiement.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ paiement.datePaiement ? paiement.datePaiement|date('d-m-Y H:i:s') : '' }}</td>
                 <td>
                 <a href="{{ path('app_paiement_show', {id: paiement.id}) }}" class="btn btn-sm btn-info">
                     <i class="bi bi-eye"></i>

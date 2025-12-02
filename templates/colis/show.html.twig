@@ -18,7 +18,7 @@
             N/A
         {% endif %}
     </p>
-    <p><strong>Coût d'expédition :</strong> {{ coli.prix }}</p>
+    <p><strong>Coût d'expédition :</strong> {{ coli.expedition ? coli.expedition.prix : 'N/A' }}</p>
     <p><strong>Statut :</strong> {{ coli.statut }}</p>
     <p><strong>Client :</strong> {{ coli.client.nom }} ({{ coli.client.telephone }})</p>
     <p><strong>Destinataire :</strong> {{ coli.destinataire.nom }}, {{ coli.destinataire.adresse }}, {{ coli.destinataire.telephone }}</p>
@@ -35,9 +35,6 @@
 
     <a href="{{ path('app_colis_edit', {id: coli.id}) }}" class="btn btn-warning">
         <i class="bi bi-pencil"></i> Modifier
-    </a>
-    <a href="{{ path('app_paiement_new', {colisId: coli.id}) }}" class="btn btn-primary">
-        <i class="bi bi-cash"></i> Ajouter un Paiement
     </a>
     <a href="{{ path('app_colis_index') }}" class="btn btn-secondary">Retour</a>
 </div>

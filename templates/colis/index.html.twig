@@ -14,11 +14,8 @@
             <tr>
                 <th>#</th>
                 <th>Numero</th>
-                <th>Poids</th>
                 <th>Type</th>
-                <th>Contenu</th>
-                <th>Coût d'expédition</th>
-                <th>Expédition</th>
+                <th>Poids</th>
                 <th>Client</th>
                 <th>Date de création</th>
                 <th>actions</th>
@@ -29,18 +26,8 @@
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ coli.numero }}</td>
-                <td>{{ coli.poids }}</td>
                 <td>{{ coli.type }}</td>
-                <td>{{ coli.contenu }}</td>
-                <td>{{ coli.prix }}</td>
-                <td>
-                    {% if coli.expedition %}
-                        {{ coli.expedition.type }} -
-                        {{ coli.expedition.portDepart }} -> {{ coli.expedition.portArrivee }}
-                    {% else %}
-                        N/A
-                    {% endif %}
-                </td>
+                <td>{{ coli.poids }}</td>
                 <td> {{ coli.client.nom }} </td>
                 <td>{{ coli.createdAt ? coli.createdAt|date('d-m-Y H:i:s') : '' }}</td>
                 <td>

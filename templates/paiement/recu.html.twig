@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Reçu de Paiement</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .recu-container {
+            width: 600px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        @media print {
+            .btn { display: none; }
+            body { margin: 0; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="recu-container">
+
+    <h2>REÇU DE PAIEMENT</h2>
+
+    <div class="section">
+        <p><span class="label">Date :</span> {{ paiement.datePaiement|date('d/m/Y H:i') }}</p>
+        <p><span class="label">Référence Paiement :</span> P{{ paiement.id }}</p>
+    </div>
+
+    <hr>
+
+    <div class="section">
+        {% set colis = paiement.expedition.colis|first %}
+        <p><span class="label">Client :</span>{{ colis ? colis.client.nom : 'Aucun client associé' }}</p>
+        <p><span class="label">Numéro Expédition :</span> {{ paiement.expedition.numero }}</p>
+        <p><span class="label">Type d'Expédition :</span> {{ paiement.expedition.type }}</p>
+        <p><span class="label">Destination :</span>
+            {{ paiement.expedition.portDepart }} → {{ paiement.expedition.portArrivee }}
+        </p>
+    </div>
+
+    <hr>
+
+    <div class="section">
+        <p><span class="label">Colis associés :</span></p>
+        <ul>
+            {% for colis in paiement.expedition.colis %}
+                <li>{{ loop.index }} : {{ colis.contenu }} - Poids: {{ colis.poids }} kg</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <hr>
+
+    <div class="section">
+        <p><span class="label">Montant payé :</span>
+            <strong>{{ paiement.montant }} F CFA</strong></p>
+        <p><span class="label">Total Expédition :</span>
+            {{ paiement.expedition.prix }} F CFA</p>
+        <p><span class="label">Reste à payer :</span>
+            {{ paiement.expedition.resteAPayer() }} F CFA</p>
+    </div>
+
+    <hr>
+
+    <p class="footer">
+        Merci pour votre confiance.<br>
+        Ce reçu est généré automatiquement et n'a pas besoin de signature.
+    </p>
+
+</div>
+
+<div style="text-align:center; margin-top: 20px;">
+    <button class="btn btn-primary" onclick="window.print()">Imprimer</button>
+</div>
+
+</body>
+</html>

@@ -48,6 +48,40 @@
 
 <hr>
 
+<h4>Dernières Expéditions enregistrées</h4>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Numero</th>
+                <th>Type</th>
+                <th>Date Depart</th>
+                <th>Date Arrivee Prevue</th>
+                <th>Port Depart</th>
+                <th>Port Arrivee</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expedition in derniersExpeditions %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ expedition.numero }}</td>
+                <td>{{ expedition.type }}</td>
+                <td>{{ expedition.dateDepart ? expedition.dateDepart|date('d/m/Y') : '' }}</td>
+                <td>{{ expedition.dateArriveePrevue ? expedition.dateArriveePrevue|date('d/m/Y') : '' }}</td>
+                <td>{{ expedition.portDepart }}</td>
+                <td>{{ expedition.portArrivee }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">Aucune expédition enregistrée récemment.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+<hr>
+
 <h4>Derniers colis enregistrés</h4>
 
 <table class="table table-striped mt-3">
@@ -57,7 +91,6 @@
             <th>Client</th>
             <th>Numero du coli</th>
             <th>Poids</th>
-            <th>Prix d'expédition</th>
             <th>Date</th>
         </tr>
     </thead>
@@ -68,7 +101,6 @@
             <td>{{ colis.client.nom }}</td>
             <td>{{ colis.numero }}</td>
             <td>{{ colis.poids }} kg</td>
-            <td>{{ colis.prix }} F CFA</td>
             <td>{{ colis.createdAt|date('d/m/Y') }}</td>
         </tr>
         {% else %}

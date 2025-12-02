@@ -5,12 +5,10 @@ namespace App\Form;
 use App\Entity\Client;
 use App\Entity\Colis;
 use App\Entity\Destinataire;
-use App\Entity\Expedition;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -38,29 +36,6 @@ class ColisType extends AbstractType
                 'label' => 'Contenu',
                 'required' => false,
                 'attr' => ['class' => 'form-control']
-            ])
-            ->add('expedition', EntityType::class, [
-                'class' => Expedition::class,
-                'choice_label' => function (Expedition $expedition) {
-                    return $expedition->getType() . ' | ' . $expedition->getPortDepart() . ' -> ' . $expedition->getPortArrivee();
-                },
-                'choice_attr' => function (Expedition $expedition) {
-                    return [
-                        'data-type' => $expedition->getType(),
-                    ];
-                },
-                'required' => false,
-                'label' => 'Type Expédition',
-                'attr' => ['class' => 'form-control']
-            ])
-            ->add('prix', MoneyType::class, [
-                'label' => 'Coût d\'expédition (FCFA)',
-                'currency' => 'XOF',
-                'required' => false,
-                'attr' => [
-                    'readonly' => true,
-                    'class' => 'form-control'
-                    ]
             ])
             ->add('statut', ChoiceType::class, [
                 'label' => 'Statut',

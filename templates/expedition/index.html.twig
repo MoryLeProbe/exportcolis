@@ -14,12 +14,9 @@
             <tr>
                 <th>#</th>
                 <th>Numero</th>
-                <th>Type</th>
-                <th>DateDepart</th>
-                <th>DateArriveePrevue</th>
-                <th>DateArriveeReelle</th>
-                <th>PortDepart</th>
-                <th>PortArrivee</th>
+                <th>Type d'Expédition</th>
+                <th>Colis associés</th>
+                <th>Coût d'expédition</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -29,11 +26,16 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ expedition.numero }}</td>
                 <td>{{ expedition.type }}</td>
-                <td>{{ expedition.dateDepart ? expedition.dateDepart|date('Y-m-d') : '' }}</td>
-                <td>{{ expedition.dateArriveePrevue ? expedition.dateArriveePrevue|date('Y-m-d') : '' }}</td>
-                <td>{{ expedition.dateArriveeReelle ? expedition.dateArriveeReelle|date('Y-m-d') : '' }}</td>
-                <td>{{ expedition.portDepart }}</td>
-                <td>{{ expedition.portArrivee }}</td>
+                <td>
+                    {% for coli in expedition.colis %}
+                        <div class="mb-1">
+                            <strong>{{ coli.numero }}</strong> - {{ coli.type }} ({{ coli.poids }} kg)
+                        </div>
+                    {% else %}
+                        <span class="text-muted">Aucun colis associé</span>
+                    {% endfor %}
+                </td>
+                <td>{{ expedition.prix }}</td>
                 <td>
                 <a href="{{ path('app_expedition_show', {id: expedition.id}) }}" class="btn btn-sm btn-info">
                     <i class="bi bi-eye"></i>

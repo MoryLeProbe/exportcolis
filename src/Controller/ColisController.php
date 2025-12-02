@@ -6,7 +6,6 @@ use App\Entity\Colis;
 use App\Entity\HistoriqueColis;
 use App\Form\ColisType;
 use App\Repository\ColisRepository;
-use App\Service\TarifExpeditionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,24 +24,13 @@ final class ColisController extends AbstractController
     }
 
     #[Route('/new', name: 'app_colis_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, TarifExpeditionService $tarifService): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $coli = new Colis();
         $form = $this->createForm(ColisType::class, $coli);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $expedition = $coli->getExpedition();
-            $type = $expedition->getType();
-            $poids = $coli->getPoids();
-            $depart = $expedition->getPortDepart();
-            $arrivee = $expedition->getPortArrivee();
-
-            // Calcul automatique du prix
-            $prix = $tarifService->calculerPrix($poids, $type, $depart, $arrivee);
-            $coli->setPrix($prix);
-
             $entityManager->persist($coli);
             $entityManager->flush();
 

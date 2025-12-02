@@ -33,9 +33,6 @@ class Colis
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $contenu = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private ?string $prix = null;
-
     #[ORM\Column(length: 30)]
     private ?string $statut = self::STATUT_EN_ATTENTE;
 
@@ -68,15 +65,11 @@ class Colis
      #[ORM\OneToMany(mappedBy: 'colis', targetEntity: HistoriqueColis::class, cascade: ['persist', 'remove'])]
     private Collection $historiqueColis;
 
-    #[ORM\OneToMany(mappedBy: 'colis', targetEntity: Paiement::class, cascade: ['persist', 'remove'])]
-    private Collection $paiements;
-
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->historiqueColis = new ArrayCollection();
-        $this->paiements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,18 +121,6 @@ class Colis
     public function setContenu(?string $contenu): static
     {
         $this->contenu = $contenu;
-
-        return $this;
-    }
-
-    public function getPrix(): ?string
-    {
-        return $this->prix;
-    }
-
-    public function setPrix(string $prix): static
-    {
-        $this->prix = $prix;
 
         return $this;
     }
@@ -268,19 +249,4 @@ class Colis
 
         return $this;
     }
-
-    public function getMontantPaye(): int
-    {
-        $total = 0;
-        foreach ($this->paiements as $p) {
-            $total += $p->getMontant();
-        }
-        return $total;
-    }
-
-    public function getResteAPayer(): int
-    {
-        return $this->prix - $this->getMontantPaye();
-    }
-
 }

@@ -16,20 +16,16 @@ class ExpeditionRepository extends ServiceEntityRepository
         parent::__construct($registry, Expedition::class);
     }
 
-//    /**
-//     * @return Expedition[] Returns an array of Expedition objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Expedition[] Returns an array of Expedition objects
+     */
+    public function findAllOrderedByIdDesc(): array
+    {
+            return $this->createQueryBuilder('c')
+                ->orderBy('c.id', 'DESC')
+                ->getQuery()
+                ->getResult();
+        }
 
 //    public function findOneBySomeField($value): ?Expedition
 //    {

@@ -28,6 +28,9 @@ class DashboardController extends AbstractController
         $totalExpeditions = $expeditionRepository->count([]);
         $totalPaiements = $paiementRepository->count([]);
 
+        // 5 derniers expeditions
+        $derniersExpeditions = $expeditionRepository->findBy([], ['id' => 'DESC'], 5);
+
         // 5 derniers colis
         $derniersColis = $colisRepository->findBy([], ['createdAt' => 'DESC'], 5);
 
@@ -41,6 +44,7 @@ class DashboardController extends AbstractController
             'totalPaiements'   => $totalPaiements,
             'derniersColis'    => $derniersColis,
             'historiques'      => $historiques,
+            'derniersExpeditions' => $derniersExpeditions,
         ]);
     }
 }

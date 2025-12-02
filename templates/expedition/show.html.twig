@@ -6,17 +6,51 @@
 <h2 class="mb-4">Détails de l'Expédition</h2>
 
 <div class="card p-4 shadow-sm">
-    <p><strong>Id:</strong> {{ expedition.id }}</p>
+    <p><strong>#:</strong> {{ expedition.id }}</p>
     <p><strong>Numéro:</strong> {{ expedition.numero }}</p>
     <p><strong>Type:</strong> {{ expedition.type }}</p>
+    <p><strong>Coût d'Expédition:</strong> {{ expedition.prix }}</p>
     <p><strong>Date de Départ:</strong> {{ expedition.dateDepart ? expedition.dateDepart|date('Y-m-d') : 'N/A' }}</p>
-    <p><strong>Date d'Arrivée Prévue:</strong> {{ expedition.dateArriveePrevue ? expedition.dateArriveePrevue|date('Y-m-d') : 'N/A' }}</p>
-    <p><strong>Date d'Arrivée Réelle:</strong> {{ expedition.dateArriveeReelle ? expedition.dateArriveeReelle|date('Y-m-d') : 'N/A' }}</p>
+    <p><strong>Date d'Arrivée Prévue:</strong> {{ expedition.dateArriveePrevue ? expedition.dateArriveePrevue|date('d-m-Y') : 'N/A' }}</p>
+    <p><strong>Date d'Arrivée Réelle:</strong> {{ expedition.dateArriveeReelle ? expedition.dateArriveeReelle|date('d-m-Y') : 'N/A' }}</p>
     <p><strong>Port de Départ:</strong> {{ expedition.portDepart }}</p>
     <p><strong>Port d'Arrivée:</strong> {{ expedition.portArrivee }}</p>
 
+    <h3 class="mt-4">Colis associés</h3>
+    {% if expedition.colis|length > 0 %}
+        <ul class="list-group mb-3">
+            {% for coli in expedition.colis %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ coli.numero }}</strong> - {{ coli.type }} ({{ coli.poids }} kg)
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">Aucun colis associé à cette expédition.</p>
+    {% endif %}
+
+    <h3 class="mt-4">Paiements associés</h3>
+    {% if expedition.paiements %}
+        <ul class="list-group mb-3">
+            {% for paiement in expedition.paiements %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ loop.index }}</strong> - {{ paiement.montant }} FCFA - Payé le : {{ paiement.datePaiement ? paiement.datePaiement|date("d-m-Y") : "N/A" }} - Statut: {{ paiement.statut }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">Aucun paiement associé à cette expédition.</p>
+    {% endif %}
+
     <a href="{{ path('app_expedition_edit', {id: expedition.id}) }}" class="btn btn-warning">
         <i class="bi bi-pencil"></i> Modifier
+    </a>
+    <a href="{{ path('app_paiement_new', {expeditionId: expedition.id}) }}" class="btn btn-primary">
+        <i class="bi bi-cash"></i> Ajouter un Paiement
     </a>
     <a href="{{ path('app_expedition_index') }}" class="btn btn-secondary">Retour</a>
 </div>

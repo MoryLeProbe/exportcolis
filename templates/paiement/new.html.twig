@@ -3,13 +3,13 @@
 {% block title %}Nouveau Paiement{% endblock %}
 
 {% block body %}
-<h2 class="mb-4">Créer un Paiement pour le Colis {{ paiement.colis.numero }}</h2>
+<h2 class="mb-4">Créer un Paiement pour l'Expédition {{ paiement.expedition.numero }}</h2>
 
 <div class="card p-4 shadow-sm mb-4">
-    <h5>Détails du Colis</h5>
-    <p><strong>Numéro :</strong> {{ paiement.colis.numero }}</p>
-    <p><strong>Prix :</strong> {{ paiement.colis.prix }} F CFA</p>
-    <p><strong>Reste à payer :</strong> {{ paiement.colis.getResteAPayer() }} F CFA</p>
+    <h5>Détails de l'Expédition</h5>
+    <p><strong>Numéro :</strong> {{ paiement.expedition.numero }}</p>
+    <p><strong>Prix :</strong> {{ paiement.expedition.prix }} F CFA</p>
+    <p><strong>Reste à payer :</strong> {{ paiement.expedition.resteAPayer() }} F CFA</p>
 </div>
 
 {{ form_start(form) }}
@@ -18,7 +18,7 @@
         <button class="btn btn-success mt-3">
             <i class="bi bi-check-circle"></i> Enregistrer
         </button>
-        <a href="{{ path('app_colis_show', {id: paiement.colis.id}) }}" class="btn btn-secondary mt-3">Retour</a>
+        <a href="{{ path('app_expedition_show', {id: paiement.expedition.id}) }}" class="btn btn-secondary mt-3">Retour</a>
     </div>
 {{ form_end(form) }}
 

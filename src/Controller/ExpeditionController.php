@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\TarifExpeditionService;
 
 #[Route('/expedition')]
 final class ExpeditionController extends AbstractController
@@ -18,18 +19,37 @@ final class ExpeditionController extends AbstractController
     public function index(ExpeditionRepository $expeditionRepository): Response
     {
         return $this->render('expedition/index.html.twig', [
-            'expeditions' => $expeditionRepository->findAll(),
+            'expeditions' => $expeditionRepository->findAllOrderedByIdDesc(),
         ]);
     }
 
     #[Route('/new', name: 'app_expedition_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, TarifExpeditionService $tarifExpedition): Response
     {
         $expedition = new Expedition();
         $form = $this->createForm(ExpeditionType::class, $expedition);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Gérer les colis sélectionnés manuellement
+            $selectedColis = $form->get('colis')->getData();
+            foreach ($selectedColis as $coli) {
+                $expedition->addColi($coli);
+            }
+
+            // Calcul automatique du prix total basé sur les colis associés
+            $prixTotal = 0;
+            foreach ($expedition->getColis() as $coli) {
+                $prixColi = $tarifExpedition->calculerPrix(
+                    $coli->getPoids(),
+                    $expedition->getType(),
+                    $expedition->getPortDepart(),
+                    $expedition->getPortArrivee()
+                );
+                $prixTotal += $prixColi;
+            }
+            $expedition->setPrix($prixTotal);
+
             $entityManager->persist($expedition);
             $entityManager->flush();
 
@@ -51,12 +71,25 @@ final class ExpeditionController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_expedition_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Expedition $expedition, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Expedition $expedition, EntityManagerInterface $entityManager, TarifExpeditionService $tarifExpedition): Response
     {
         $form = $this->createForm(ExpeditionType::class, $expedition);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Recalcul automatique du prix total basé sur les colis associés
+            $prixTotal = 0;
+            foreach ($expedition->getColis() as $coli) {
+                $prixColi = $tarifExpedition->calculerPrix(
+                    $coli->getPoids(),
+                    $expedition->getType(),
+                    $expedition->getPortDepart(),
+                    $expedition->getPortArrivee()
+                );
+                $prixTotal += $prixColi;
+            }
+            $expedition->setPrix($prixTotal);
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_expedition_index', [], Response::HTTP_SEE_OTHER);

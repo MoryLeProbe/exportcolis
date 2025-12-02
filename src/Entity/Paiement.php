@@ -36,7 +36,7 @@ class Paiement
 
     #[ORM\ManyToOne(inversedBy: 'paiements')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Colis $colis = null;
+    private ?Expedition $expedition = null;
 
     public function __construct()
     {
@@ -96,14 +96,14 @@ class Paiement
         return $this;
     }
 
-    public function getColis(): ?Colis
+    public function getExpedition(): ?Expedition
     {
-        return $this->colis;
+        return $this->expedition;
     }
 
-    public function setColis(Colis $colis): static
+    public function setExpedition(Expedition $expedition): static
     {
-        $this->colis = $colis;
+        $this->expedition = $expedition;
 
         return $this;
     }

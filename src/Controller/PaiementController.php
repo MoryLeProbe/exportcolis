@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Paiement;
-use App\Entity\Colis;
+use App\Entity\Expedition;
 use App\Form\PaiementType;
 use App\Repository\PaiementRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,34 +19,40 @@ final class PaiementController extends AbstractController
     public function index(PaiementRepository $paiementRepository): Response
     {
         return $this->render('paiement/index.html.twig', [
-            'paiements' => $paiementRepository->findAll(),
+            'paiements' => $paiementRepository->findAllOrderedByCreatedAtDesc(),
         ]);
     }
 
-    #[Route('/new/{colisId}', name: 'app_paiement_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, int $colisId, EntityManagerInterface $entityManager): Response
+    #[Route('/new/{expeditionId}', name: 'app_paiement_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, int $expeditionId, EntityManagerInterface $entityManager): Response
     {
-        $colis = $entityManager->getRepository(Colis::class)->find($colisId);
-        if (!$colis) {
-            throw $this->createNotFoundException('Colis non trouvé');
+        $expedition = $entityManager->getRepository(Expedition::class)->find($expeditionId);
+        if (!$expedition) {
+            throw $this->createNotFoundException('Expédition non trouvée');
         }
 
         $paiement = new Paiement();
-        $paiement->setColis($colis);
+        $paiement->setExpedition($expedition);
         $form = $this->createForm(PaiementType::class, $paiement);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($paiement->getMontant() > $colis->getResteAPayer()) {
+            $montantTotalPaye = 0;
+            foreach ($expedition->getPaiements() as $p) {
+                $montantTotalPaye += $p->getMontant();
+            }
+            $resteAPayer = $expedition->getPrix() - $montantTotalPaye;
+
+            if ($paiement->getMontant() > $resteAPayer) {
                 $this->addFlash('error', 'Montant trop élevé !');
-                return $this->redirectToRoute('app_colis_show', ['id' => $colis->getId()]);
+                return $this->redirectToRoute('app_expedition_show', ['id' => $expedition->getId()]);
             }
 
             $entityManager->persist($paiement);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_colis_show', ['id' => $colis->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_expedition_show', ['id' => $expedition->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('paiement/new.html.twig', [
@@ -91,4 +97,13 @@ final class PaiementController extends AbstractController
 
         return $this->redirectToRoute('app_paiement_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/recu', name: 'app_paiement_recu')]
+    public function recu(Paiement $paiement): Response
+    {
+        return $this->render('paiement/recu.html.twig', [
+            'paiement' => $paiement
+        ]);
+    }
+
 }

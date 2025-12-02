@@ -7,7 +7,7 @@ class TarifExpeditionService
         'AERIEN' => [
             'ABIDJAN' => [
                 'PARIS' => 6000,
-                'MADRID' => 5500,
+                'MARSEILLE' => 5500,
                 'BRUXELLES' => 6500,
             ],
         ],
@@ -15,6 +15,7 @@ class TarifExpeditionService
             'ABIDJAN' => [
                 'PARIS' => 2500,
                 'MARSEILLE' => 2000,
+                'BRUXELLES' => 3500,
             ],
         ],
     ];
