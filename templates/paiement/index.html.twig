@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiements{% endblock %}
+
+{% block body %}
+    <h2 class="mb-4">Liste des Paiements</h2>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>#</th>
+                <th>Montant</th>
+                <th>Colis</th>
+                <th>Mode</th>
+                <th>Statut</th>
+                <th>Date de Paiement</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for paiement in paiements %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ paiement.montant }}</td>
+                <td>{{ paiement.colis.numero }}</td>
+                <td>{{ paiement.mode }}</td>
+                <td>{{ paiement.statut }}</td>
+                <td>{{ paiement.datePaiement ? paiement.datePaiement|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                <a href="{{ path('app_paiement_show', {id: paiement.id}) }}" class="btn btn-sm btn-info">
+                    <i class="bi bi-eye"></i>
+                </a>
+                <a href="{{ path('app_paiement_edit', {id: paiement.id}) }}" class="btn btn-sm btn-warning">
+                    <i class="bi bi-pencil"></i>
+                </a>
+
+                <form action="{{ path('app_paiement_delete', {id: paiement.id}) }}" method="post" class="d-inline">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paiement.id) }}">
+                    <button class="btn btn-sm btn-danger" onclick="return confirm('Supprimer ?')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+
+            </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">Aucun client trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

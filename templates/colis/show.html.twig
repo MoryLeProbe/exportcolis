@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Colis {{ coli.numero }}{% endblock %}
+
+{% block body %}
+<h2 class="mb-4">Détails du Colis</h2>
+
+<div class="card p-4 shadow-sm">
+    <p><strong>Numero :</strong> {{ coli.numero }}</p>
+    <p><strong>Poids :</strong> {{ coli.poids }}</p>
+    <p><strong>Type :</strong> {{ coli.type }}</p>
+    <p><strong>Contenu :</strong> {{ coli.contenu }}</p>
+    <p><strong>Expédition :</strong>
+        {% if coli.expedition %}
+            {{ coli.expedition.type }} -
+            {{ coli.expedition.portDepart }} -> {{ coli.expedition.portArrivee }}
+        {% else %}
+            N/A
+        {% endif %}
+    </p>
+    <p><strong>Coût d'expédition :</strong> {{ coli.prix }}</p>
+    <p><strong>Statut :</strong> {{ coli.statut }}</p>
+    <p><strong>Client :</strong> {{ coli.client.nom }} ({{ coli.client.telephone }})</p>
+    <p><strong>Destinataire :</strong> {{ coli.destinataire.nom }}, {{ coli.destinataire.adresse }}, {{ coli.destinataire.telephone }}</p>
+    <p><strong>Photo :</strong>
+        {% if coli.photo %}
+            <br>
+            <img src="{{ asset('uploads/' ~ coli.photo) }}" alt="Photo du colis" style="max-width: 300px; max-height: 300px;">
+        {% else %}
+            <span class="text-muted">Pas de photo</span>
+        {% endif %}
+    </p>
+    <p><strong>Date de création :</strong> {{ coli.createdAt ? coli.createdAt|date('Y-m-d H:i:s') : '' }}</p>
+    <p><strong>Date de mise à jour :</strong> {{ coli.updatedAt ? coli.updatedAt|date('Y-m-d H:i:s') : '' }}</p>
+
+    <a href="{{ path('app_colis_edit', {id: coli.id}) }}" class="btn btn-warning">
+        <i class="bi bi-pencil"></i> Modifier
+    </a>
+    <a href="{{ path('app_paiement_new', {colisId: coli.id}) }}" class="btn btn-primary">
+        <i class="bi bi-cash"></i> Ajouter un Paiement
+    </a>
+    <a href="{{ path('app_colis_index') }}" class="btn btn-secondary">Retour</a>
+</div>
+
+{% endblock %}

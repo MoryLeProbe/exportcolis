@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Expeditions{% endblock %}
+
+{% block body %}
+    <h2 class="mb-4">Liste des Expeditions</h2>
+
+    <a href="{{ path('app_expedition_new') }}" class="btn btn-primary mb-3">
+        <i class="bi bi-plus-circle"></i> Nouvelle Expédition
+    </a>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>#</th>
+                <th>Numero</th>
+                <th>Type</th>
+                <th>DateDepart</th>
+                <th>DateArriveePrevue</th>
+                <th>DateArriveeReelle</th>
+                <th>PortDepart</th>
+                <th>PortArrivee</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for expedition in expeditions %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ expedition.numero }}</td>
+                <td>{{ expedition.type }}</td>
+                <td>{{ expedition.dateDepart ? expedition.dateDepart|date('Y-m-d') : '' }}</td>
+                <td>{{ expedition.dateArriveePrevue ? expedition.dateArriveePrevue|date('Y-m-d') : '' }}</td>
+                <td>{{ expedition.dateArriveeReelle ? expedition.dateArriveeReelle|date('Y-m-d') : '' }}</td>
+                <td>{{ expedition.portDepart }}</td>
+                <td>{{ expedition.portArrivee }}</td>
+                <td>
+                <a href="{{ path('app_expedition_show', {id: expedition.id}) }}" class="btn btn-sm btn-info">
+                    <i class="bi bi-eye"></i>
+                </a>
+                <a href="{{ path('app_expedition_edit', {id: expedition.id}) }}" class="btn btn-sm btn-warning">
+                    <i class="bi bi-pencil"></i>
+                </a>
+
+                <form action="{{ path('app_expedition_delete', {id: expedition.id}) }}" method="post" class="d-inline">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ expedition.id) }}">
+                    <button class="btn btn-sm btn-danger" onclick="return confirm('Supprimer ?')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+
+            </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9" class="text-center text-muted">Aucune expédition trouvée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

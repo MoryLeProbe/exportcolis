@@ -1,0 +1,114 @@
+{# templates/dashboard.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard – Expédition Colis{% endblock %}
+
+{% block body %}
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row">
+
+    <div class="col-md-3">
+        <div class="card shadow-sm mb-3">
+            <div class="card-body text-center">
+                <i class="bi bi-person fs-1 text-primary"></i>
+                <h4 class="mt-3">{{ totalClients }} Clients</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm mb-3">
+            <div class="card-body text-center">
+                <i class="bi bi-box-seam fs-1 text-warning"></i>
+                <h4 class="mt-3">{{ totalColis }} Colis</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm mb-3">
+            <div class="card-body text-center">
+                <i class="bi bi-truck fs-1 text-success"></i>
+                <h4 class="mt-3">{{ totalExpeditions }} Expéditions</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm mb-3">
+            <div class="card-body text-center">
+                <i class="bi bi-credit-card fs-1 text-danger"></i>
+                <h4 class="mt-3">{{ totalPaiements }} Paiements</h4>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<h4>Derniers colis enregistrés</h4>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Client</th>
+            <th>Numero du coli</th>
+            <th>Poids</th>
+            <th>Prix d'expédition</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for colis in derniersColis %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ colis.client.nom }}</td>
+            <td>{{ colis.numero }}</td>
+            <td>{{ colis.poids }} kg</td>
+            <td>{{ colis.prix }} F CFA</td>
+            <td>{{ colis.createdAt|date('d/m/Y') }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6" class="text-center text-muted">Aucun colis enregistré récemment.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<hr>
+
+<h4>Dernières actions sur les colis</h4>
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Colis</th>
+            <th>Statut</th>
+            <th>Description</th>
+            <th>Date d'action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for historique in historiques %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ historique.colis.numero }}</td>
+            <td>
+                <span class="badge bg-info">{{ historique.statut }}</span>
+            </td>
+            <td>{{ historique.description }}</td>
+            <td>{{ historique.dateAction ? historique.dateAction|date('d/m/Y H:i') : '' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" class="text-center text-muted">Aucune action récente sur les colis.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

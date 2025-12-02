@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Expédition {{ expedition.numero }}{% endblock %}
+
+{% block body %}
+<h2 class="mb-4">Détails de l'Expédition</h2>
+
+<div class="card p-4 shadow-sm">
+    <p><strong>Id:</strong> {{ expedition.id }}</p>
+    <p><strong>Numéro:</strong> {{ expedition.numero }}</p>
+    <p><strong>Type:</strong> {{ expedition.type }}</p>
+    <p><strong>Date de Départ:</strong> {{ expedition.dateDepart ? expedition.dateDepart|date('Y-m-d') : 'N/A' }}</p>
+    <p><strong>Date d'Arrivée Prévue:</strong> {{ expedition.dateArriveePrevue ? expedition.dateArriveePrevue|date('Y-m-d') : 'N/A' }}</p>
+    <p><strong>Date d'Arrivée Réelle:</strong> {{ expedition.dateArriveeReelle ? expedition.dateArriveeReelle|date('Y-m-d') : 'N/A' }}</p>
+    <p><strong>Port de Départ:</strong> {{ expedition.portDepart }}</p>
+    <p><strong>Port d'Arrivée:</strong> {{ expedition.portArrivee }}</p>
+
+    <a href="{{ path('app_expedition_edit', {id: expedition.id}) }}" class="btn btn-warning">
+        <i class="bi bi-pencil"></i> Modifier
+    </a>
+    <a href="{{ path('app_expedition_index') }}" class="btn btn-secondary">Retour</a>
+</div>
+
+{% endblock %}

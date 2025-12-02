@@ -1,0 +1,112 @@
+{# templates/layout.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}EXPEDITION COLIS{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body { background: #f5f5f5; }
+        .sidebar {
+            height: 100vh;
+            background: #0d6efd;
+            color: white;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.2);
+            padding-left: 10px;
+            transition: 0.2s;
+        }
+    </style>
+
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+<div class="d-flex">
+    {# ========= SIDEBAR ========= #}
+    <div class="sidebar p-3">
+        <h4 class="text-center mb-4">EXPÉDITION</h4>
+
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a class="nav-link" href="{{ path('dashboard') }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                <a class="nav-link" href="{{ path('app_client_index') }}">
+                    <i class="bi bi-person"></i> Clients
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                <a class="nav-link" href="{{ path('app_destinataire_index') }}">
+                    <i class="bi bi-people"></i> Destinataires
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                <a class="nav-link" href="{{ path('app_colis_index') }}">
+                    <i class="bi bi-box-seam"></i> Colis
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                
+                <a class="nav-link" href="{{ path('app_expedition_index') }}">
+                    <i class="bi bi-truck"></i> Expéditions
+                </a>
+            </li>
+            
+            <li class="nav-item mb-2">
+                <a class="nav-link" href="{{ path('app_historique_colis_index') }}">
+                    <i class="bi bi-clock-history"></i> Historique Expéditions
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                <a class="nav-link" href="{{ path('app_paiement_index') }}">
+                    <i class="bi bi-credit-card"></i> Paiements
+                </a>
+            </li>
+
+            <li class="nav-item mt-4">
+                <a class="nav-link text-warning" href="#">
+                    <i class="bi bi-door-open"></i> Déconnexion
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    {# ========= CONTENU PRINCIPAL ========= #}
+    <div class="flex-grow-1 p-4">
+        
+        {# FLASH MESSAGES #}
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% block body %}{% endblock %}
+    </div>
+</div>
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
+</body>
+</html>

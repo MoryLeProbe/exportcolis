@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Client{% endblock %}
+
+{% block body %}
+<h2 class="mb-4">Créer un Client</h2>
+
+{{ form_start(form) }}
+    <div class="card p-4 shadow-sm">
+        {{ form_widget(form) }}
+        <button class="btn btn-success mt-3">
+            <i class="bi bi-check-circle"></i> Enregistrer
+        </button>
+        <a href="{{ path('app_client_index') }}" class="btn btn-secondary mt-3">Retour</a>
+    </div>
+{{ form_end(form) }}
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Colis{% endblock %}
+
+{% block body %}
+<h2 class="mb-4">Modifier le Colis</h2>
+
+{{ form_start(form) }}
+    <div class="card p-4 shadow-sm">
+        {{ form_widget(form) }}
+
+        <button class="btn btn-warning mt-3">
+            <i class="bi bi-pencil-square"></i> Modifier
+        </button>
+        <a href="{{ path('app_colis_index') }}" class="btn btn-secondary mt-3">Retour</a>
+    </div>
+{{ form_end(form) }}
+
+{% block javascripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const expeditionField = document.querySelector('#colis_expedition');
+    const poidsField = document.querySelector('#colis_poids');
+    const prixField = document.querySelector('#colis_prix');
+
+    function updateTarif() {
+        const expeditionId = expeditionField.value;
+        const poids = poidsField.value;
+
+        if (!expeditionId || poids <= 0) {
+            prixField.value = '';
+            return;
+        }
+
+        fetch('/api/tarif', {
+            method: 'POST',
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+                expeditionId: expeditionId,
+                poids: poids
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                prixField.value = data.prix;
+            } else {
+                prixField.value = "";
+            }
+        });
+    }
+
+    expeditionField.addEventListener('change', updateTarif);
+    poidsField.addEventListener('input', updateTarif);
+});
+</script>
+
+{% endblock %}
+
+{% endblock %}
