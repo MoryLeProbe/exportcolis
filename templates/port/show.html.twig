@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Port {{ port.id }}{% endblock %}
+
+{% block body %}
+<h2 class="mb-4">Détails du Port</h2>
+
+<div class="card p-4 shadow-sm">
+    <p><strong>#:</strong> {{ port.id }}</p>
+    <p><strong>Nom:</strong> {{ port.nom }}</p>
+    <p><strong>Pays:</strong> {{ port.pays }}</p>
+</div>
+
+    <a href="{{ path('app_port_edit', {id: port.id}) }}" class="btn btn-warning">
+        <i class="bi bi-pencil"></i> Modifier
+    </a>
+    <a href="{{ path('app_port_index') }}" class="btn btn-secondary">Retour</a>
+</div>
+
+{% endblock %}
