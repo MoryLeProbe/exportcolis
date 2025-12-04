@@ -27,6 +27,22 @@ class ExpeditionRepository extends ServiceEntityRepository
                 ->getResult();
         }
 
+    /**
+     * @return Expedition[] Returns an array of Expedition objects matching the search query
+     */
+    public function findBySearchQuery(string $query): array
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.colis', 'c')
+            ->where('e.numero LIKE :query')
+            ->orWhere('e.type LIKE :query')
+            ->orWhere('c.numero LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('e.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    public function findOneBySomeField($value): ?Expedition
 //    {
 //        return $this->createQueryBuilder('e')

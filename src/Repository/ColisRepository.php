@@ -27,6 +27,23 @@ class ColisRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Colis[] Returns an array of Colis objects matching the search query
+     */
+    public function findBySearchQuery(string $query): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.client', 'cl')
+            ->where('c.numero LIKE :query')
+            ->orWhere('c.type LIKE :query')
+            ->orWhere('c.poids LIKE :query')
+            ->orWhere('cl.nom LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Colis[] Returns an array of Colis objects
 //     */

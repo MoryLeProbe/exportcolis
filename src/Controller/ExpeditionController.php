@@ -16,10 +16,18 @@ use App\Service\TarifExpeditionService;
 final class ExpeditionController extends AbstractController
 {
     #[Route(name: 'app_expedition_index', methods: ['GET'])]
-    public function index(ExpeditionRepository $expeditionRepository): Response
+    public function index(ExpeditionRepository $expeditionRepository, Request $request): Response
     {
+        $search = $request->query->get('search', '');
+        if ($search) {
+            $expeditions = $expeditionRepository->findBySearchQuery($search);
+        } else {
+            $expeditions = $expeditionRepository->findAllOrderedByIdDesc();
+        }
+
         return $this->render('expedition/index.html.twig', [
-            'expeditions' => $expeditionRepository->findAllOrderedByIdDesc(),
+            'expeditions' => $expeditions,
+            'search' => $search,
         ]);
     }
 
@@ -34,7 +42,7 @@ final class ExpeditionController extends AbstractController
 
             if (!$expedition->getNumero()) {
                 $expedition->setNumero(
-                    'EXP' . date('dmY') . '' . strtoupper(substr(uniqid(), -5))
+                    'EXP' . strtoupper(substr(uniqid(), -5))
                 );
             }
 

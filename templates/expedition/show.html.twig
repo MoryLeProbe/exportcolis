@@ -39,6 +39,9 @@
                     <div>
                         <strong>{{ loop.index }}</strong> - {{ paiement.montant }} FCFA - Payé le : {{ paiement.datePaiement ? paiement.datePaiement|date("d-m-Y") : "N/A" }} - Statut: {{ paiement.statut }}
                     </div>
+                    <a href="{{ path('app_paiement_recu', {id: paiement.id}) }}" class="btn btn-sm btn-info" target="_blank">
+                        <i class="bi bi-printer"></i> Imprimer le reçu
+                    </a>
                 </li>
             {% endfor %}
         </ul>

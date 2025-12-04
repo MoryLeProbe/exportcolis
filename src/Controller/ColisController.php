@@ -16,10 +16,18 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ColisController extends AbstractController
 {
     #[Route(name: 'app_colis_index', methods: ['GET'])]
-    public function index(ColisRepository $colisRepository): Response
+    public function index(ColisRepository $colisRepository, Request $request): Response
     {
+        $search = $request->query->get('search', '');
+        if ($search) {
+            $colis = $colisRepository->findBySearchQuery($search);
+        } else {
+            $colis = $colisRepository->findAllOrderedByCreatedAtDesc();
+        }
+
         return $this->render('colis/index.html.twig', [
-            'colis' => $colisRepository->findAllOrderedByCreatedAtDesc(),
+            'colis' => $colis,
+            'search' => $search,
         ]);
     }
 
@@ -34,7 +42,7 @@ final class ColisController extends AbstractController
 
             if (!$coli->getNumero()) {
                 $coli->setNumero(
-                    'COL' . date('dmY') . '' . strtoupper(substr(uniqid(), -5))
+                    'COL' . strtoupper(substr(uniqid(), -5))
                 );
             }
             
