@@ -15,13 +15,15 @@ class PortType extends AbstractType
         $builder
             ->add('nom', TextType::class, [
                 'label' => 'Nom du port',
-                'placeholder' => 'Entrez le nom du port',
-                'attr' => ['class' => 'form-control'],
+                'attr' => [
+                    'placeholder' => 'Entrez le nom du port',
+                    'class' => 'form-control'],
             ])
             ->add('pays', TextType::class, [
                 'label' => 'Pays',
-                'placeholder' => 'Entrez le pays',
-                'attr' => ['class' => 'form-control'],
+                'attr' => [
+                    'placeholder' => 'Entrez le pays',
+                    'class' => 'form-control'],
             ])
         ;
     }

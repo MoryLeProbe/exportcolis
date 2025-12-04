@@ -21,7 +21,7 @@ class Colis
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, unique: true)]
     private ?string $numero = null;
 
     #[ORM\Column]

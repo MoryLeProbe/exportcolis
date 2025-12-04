@@ -81,4 +81,9 @@ class TarifPort
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->portDepart . ' -> ' . $this->portArrivee . ' (' . $this->typeTransport . ')';
+    }
 }

@@ -31,6 +31,13 @@ final class ExpeditionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if (!$expedition->getNumero()) {
+                $expedition->setNumero(
+                    'EXP' . date('dmY') . '' . strtoupper(substr(uniqid(), -5))
+                );
+            }
+
             // Gérer les colis sélectionnés manuellement
             $selectedColis = $form->get('colis')->getData();
             foreach ($selectedColis as $coli) {

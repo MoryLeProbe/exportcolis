@@ -1,33 +1,35 @@
 <?php
 namespace App\Service;
 
+use App\Repository\TarifPortRepository;
+use App\Repository\PortRepository;
+
 class TarifExpeditionService
 {
-    private array $tarifs = [
-        'AERIEN' => [
-            'ABIDJAN' => [
-                'PARIS' => 6000,
-                'MARSEILLE' => 5500,
-                'BRUXELLES' => 6500,
-            ],
-        ],
-        'MARITIME' => [
-            'ABIDJAN' => [
-                'PARIS' => 2500,
-                'MARSEILLE' => 2000,
-                'BRUXELLES' => 3500,
-            ],
-        ],
-    ];
+    public function __construct(private TarifPortRepository $tarifPortRepo, private PortRepository $portRepo) {}
 
-    public function calculerPrix(float $poids, string $type, string $depart, string $arrivee): float
+    public function calculerPrix(float $poids, string $type, string $portDepartNom, string $portArriveeNom): float
     {
-        if (!isset($this->tarifs[$type][$depart][$arrivee])) {
-            throw new \Exception("Tarif non défini pour : $type - $depart → $arrivee");
+        // Récupération des objets Port par nom
+        $portDepart = $this->portRepo->findOneBy(['nom' => $portDepartNom]);
+        $portArrivee = $this->portRepo->findOneBy(['nom' => $portArriveeNom]);
+
+        if (!$portDepart || !$portArrivee) {
+            throw new \Exception("Port de départ ou d'arrivée introuvable.");
         }
 
-        $tarifKg = $this->tarifs[$type][$depart][$arrivee];
+        // Récupération du tarif selon ports & type
+        $tarif = $this->tarifPortRepo->findOneBy([
+            'portDepart' => $portDepart,
+            'portArrivee' => $portArrivee,
+            'typeTransport' => $type
+        ]);
 
-        return $poids * $tarifKg;
+        if (!$tarif) {
+            return 0; // Aucun tarif défini, prix = 0
+        }
+
+        // Calcul du prix = poids * tarif au kilo
+        return $poids * $tarif->getPrixKg();
     }
 }

@@ -22,6 +22,8 @@ class ColisType extends AbstractType
         $builder
             ->add('numero', TextType::class, [
                 'label' => 'Numéro du colis',
+                'disabled' => true,
+                'required' => false,
                 'attr' => ['class' => 'form-control']
             ])
             ->add('poids', NumberType::class, [

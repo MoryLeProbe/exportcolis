@@ -1,17 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tarif de Port {{ tarifPort.id }}{% endblock %}
+{% block title %}Tarif de Port {{ tarif_port.id }}{% endblock %}
 
 {% block body %}
 <h2 class="mb-4">Détails du Port</h2>
 
 <div class="card p-4 shadow-sm">
-    <p><strong>#:</strong> {{ tarifPort.id }}</p>
-    <p><strong>Nom:</strong> {{ tarifPort.typeTransport }}</p>
-    <p><strong>Pays:</strong> {{ tarifPort.prixKg }}</p>
+    <p><strong>#:</strong> {{ tarif_port.id }}</p>
+    <p><strong>Nom du port de départ:</strong> {{ tarif_port.portDepart }}</p>
+    <p><strong>Nom du port d'arrivée:</strong> {{ tarif_port.portArrivee }}</p>
+    <p><strong>Type de transport:</strong> {{ tarif_port.typeTransport }}</p>
+    <p><strong>Pays:</strong> {{ tarif_port.prixKg }}</p>
 </div>
 
-    <a href="{{ path('app_tarif_port_edit', {id: tarifPort.id}) }}" class="btn btn-warning">
+    <a href="{{ path('app_tarif_port_edit', {id: tarif_port.id}) }}" class="btn btn-warning">
         <i class="bi bi-pencil"></i> Modifier
     </a>
     <a href="{{ path('app_tarif_port_index') }}" class="btn btn-secondary">Retour</a>

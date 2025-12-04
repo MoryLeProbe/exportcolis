@@ -31,6 +31,13 @@ final class ColisController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if (!$coli->getNumero()) {
+                $coli->setNumero(
+                    'COL' . date('dmY') . '' . strtoupper(substr(uniqid(), -5))
+                );
+            }
+            
             $entityManager->persist($coli);
             $entityManager->flush();
 

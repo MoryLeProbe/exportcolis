@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Colis;
 use App\Entity\Expedition;
+use App\Entity\Port;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,6 +21,8 @@ class ExpeditionType extends AbstractType
         $builder
             ->add('numero', TextType::class, [
                 'label' => 'Numéro d\'expédition',
+                'disabled' => true,
+                'required' => false,
                 'attr' => ['class' => 'form-control']
             ])
             ->add('type', ChoiceType::class, [
@@ -60,12 +63,18 @@ class ExpeditionType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('portDepart', TextType::class, [
+            ->add('portDepart', EntityType::class, [
+                'class' => Port::class,
+                'choice_label' => 'nom',
                 'label' => 'Port de départ',
+                'placeholder' => 'Sélectionner un port de départ',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('portArrivee', TextType::class, [
+            ->add('portArrivee', EntityType::class, [
+                'class' => Port::class,
+                'choice_label' => 'nom',
                 'label' => 'Port d\'arrivée',
+                'placeholder' => 'Sélectionner un port d\'arrivée',
                 'attr' => ['class' => 'form-control']
             ])
         ;

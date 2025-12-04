@@ -22,22 +22,24 @@ class TarifPortType extends AbstractType
                     'MARITIME' => TarifPort::TYPE_MARITIME,
                     'AÉRIEN' => TarifPort::TYPE_AERIEN,
                 ],
-                'placeholder' => 'Entrez le type de transport',
                 'attr' => [
+                    'placeholder' => 'Entrez le type de transport',
                     'class' => 'form-control',
                 ],
             ])
             ->add('portDepart', EntityType::class, [
                 'class' => Port::class,
                 'choice_label' => 'nom',
-                'placeholder' => 'Sélectionnez le port de départ',
-                'attr' => ['class' => 'form-control']
+                'attr' => [
+                    'placeholder' => 'Sélectionnez le port de départ',
+                    'class' => 'form-control']
             ])
             ->add('portArrivee', EntityType::class, [
                 'class' => Port::class,
                 'choice_label' => 'nom',
-                'placeholder' => 'Sélectionnez le port d\'arrivée',
-                'attr' => ['class' => 'form-control']
+                'attr' => [
+                    'placeholder' => 'Sélectionnez le port d\'arrivée',
+                    'class' => 'form-control']
             ])
             ->add('prixKg', MoneyType::class, [
                 'label' => 'Prix par kg',
